@@ -5,12 +5,21 @@ const request = require("supertest");
 const {app} = require("./../server");
 const {Todo} = require("./../models/todo");
 
+const todos = [{
+    text: "First test todo"
+}, {
+    text: "second test todo"
+}, {
+    text: "third test todo"
+}];
+
 beforeEach((done) =>{
     Todo.remove({}).then(()=>{
-        done();
-    });
-}); //erase all Todos in the database before each test case 
+        Todo.insertMany(todos); //insert dummy vbls into database for testing
+    }).then(() => done());
+});
 
+//test POST request
 describe("POST Todos", () =>{
     it("should create a new todo in the database", (done)=>{
         var text = "Test text";
@@ -28,7 +37,7 @@ describe("POST Todos", () =>{
                 return done(err);
             }
 
-            Todo.find().then((todos) => {
+            Todo.find({text}).then((todos) => {
                 expect(todos.length).toBe(1);
                 expect(todos[0].text).toBe(text);
                 done();
@@ -39,7 +48,7 @@ describe("POST Todos", () =>{
 
     });
 
-    it("should not write to the database with an invalid value", ()=>{
+    it("should not write to the database with an invalid value", (done)=>{
 
         //send the POST request
         request(app)
@@ -52,7 +61,7 @@ describe("POST Todos", () =>{
             }
 
             Todo.find().then((todos) => {
-                expect(todos.length).toBe(0);
+                expect(todos.length).toBe(3);
                 done();
             }).catch((e) =>{
                 done(e);
@@ -62,3 +71,23 @@ describe("POST Todos", () =>{
     });
 
 });
+
+//Test GET request
+
+describe("GET /todos", ()=>{
+    it("Should get all todos in the database", (done)=>{
+        request(app)
+        .get("/todos")
+        .expect(200)
+        .expect((res)=>{
+            expect(res.body.todos.length).toBe(3);
+        })
+        .end(done);
+    });
+});
+
+
+
+
+
+
