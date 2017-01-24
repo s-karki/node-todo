@@ -48,7 +48,7 @@ app.get("/todos/:id", (req, res) => {
             res.status(404).send(); //failure case 
             return console.log("Unable to find todo");
         }
-        res.status(200).send({todo}); //success case 
+        res.status(200).send({todo}); //success case (better to write as an object)
     }, (e) => { //error 
         res.status(400).send();
         console.log("Bad request", e);
