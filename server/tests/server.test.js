@@ -27,7 +27,7 @@ describe("POST Todos", () =>{
         //send the request 
         request(app)
         .post("/todos")
-        .send({text}) //send data with the POST request, converted to JSON
+        .send({text}) //send data, converted to JSON
         .expect(200)
         .expect((res) =>{
             expect(res.body.text).toBe(text); //equals text string defined above
