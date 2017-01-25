@@ -40,13 +40,15 @@ app.get("/todos/:id", (req, res) => {
 
     if(!ObjectID.isValid(id)){ //validate object
         res.status(404).send();
-        return console.log("Invalid ID");
+        //return console.log("Invalid ID");
+        return 
     }
 
     Todo.findById(id).then((todo) => { //query database
         if(!todo){
             res.status(404).send(); //failure case 
-            return console.log("Unable to find todo");
+            //return console.log("Unable to find todo");
+            return 
         }
         res.status(200).send({todo}); //success case (better to write as an object)
     }, (e) => { //error 
@@ -62,6 +64,9 @@ app.listen(3000, ()=>{
 
 
 module.exports.app = app; 
+
+
+
 
 
 
