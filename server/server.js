@@ -29,7 +29,7 @@ app.post("/todos", (req, res) =>{
 
 app.get("/todos", (req, res)=>{
     Todo.find().then((todos)=>{
-        res.send({todos});
+        res.send({todos}); //retrieves the array from the database
     }, (err) =>{
         res.status(400).send(e); //bad request
     });
