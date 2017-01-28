@@ -17,7 +17,6 @@ app.post("/todos", (req, res) =>{
         text: req.body.text
     }); //call a sort of ctor with an object that has req's body
 
-console.log("Saving todo");
 //save to the database 
     todo.save().then((doc) =>{
         res.send(doc);
@@ -72,8 +71,7 @@ app.delete("/todos/:id", (req, res) =>{
         if(!todo){
             return res.status(404).send();
         }
-        res.status(200).send(todo);
-        console.log("Deleted Todo: ", todo);
+        res.status(200).send({todo});
 
     }).catch((e)=>{
         res.status(400).send();
