@@ -17,6 +17,7 @@ app.post("/todos", (req, res) =>{
         text: req.body.text
     }); //call a sort of ctor with an object that has req's body
 
+console.log("Saving todo");
 //save to the database 
     todo.save().then((doc) =>{
         res.send(doc);
@@ -57,6 +58,27 @@ app.get("/todos/:id", (req, res) => {
         console.log("Bad request", e);
     });
 
+})
+
+app.delete("/todos/:id", (req, res) =>{
+    //get the id
+    var id = req.params.id;
+    //validate the id --> invalid returns 404 
+    if(!ObjectID.isValid(id)){
+        return res.status(404).send(); 
+    }
+
+    Todo.findByIdAndRemove(id).then((todo) =>{
+        if(!todo){
+            return res.status(404).send();
+        }
+        res.status(200).send(todo);
+        console.log("Deleted Todo: ", todo);
+
+    }).catch((e)=>{
+        res.status(400).send();
+    });
+ 
 });
 
 app.listen(port, ()=>{
@@ -65,45 +87,6 @@ app.listen(port, ()=>{
 
 
 module.exports.app = app; 
-
-
-
-
-
-
-
-// var newTodo = new Todo({
-//     text: "Read book"
-// }); //akin to a constructor 
-
-// newTodo.save().then((res) =>{
-//     console.log("saved todo", res);
-// }, (err) =>{
-//     console.log("Unable to save Todo");
-// });
-
-
-// var newTask = new Todo({
-//     text: "   Sampling.    "
-// });
-
-// newTask.save().then((res)=>{
-//     console.log("save todo", res);
-// }, (err)=>{
-//     console.log("unable to save todo", err);
-// });
-
-
-
-// var newUser = new User({
-//     email: "bbt@gmail.com"
-// });
-
-// newUser.save().then((res)=>{
-//     console.log("Saved user ", res);
-// }, (err) => {
-//     console.log("Could not save user ", err);
-// });
 
 
 
