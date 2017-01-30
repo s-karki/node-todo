@@ -8,6 +8,7 @@ var {mongoose} = require("./db/mongoose");
 var {Todo} = require('./models/todo');
 var {User} = require('./models/user');
 var {ObjectID} = require("mongodb");
+var {authenticate} = require("./middleware/authenticate");
 
 var app = express();
 const port = process.env.PORT || 3000; //for heroku 
@@ -83,7 +84,6 @@ app.delete("/todos/:id", (req, res) =>{
 });
 
 //HTTP PATCH Method to UPDATE a resource 
-
 app.patch("/todos/:id", (req, res)=>{
     var id = req.params.id;
     var body = _.pick(req.body, ['text', 'completed']); //users only update text and completed
@@ -109,7 +109,7 @@ app.patch("/todos/:id", (req, res)=>{
 });
 
 
-
+//public route for signup 
 app.post('/users', (req, res) => {
   var body = _.pick(req.body, ['email', 'password']);
   var user = new User(body);
@@ -119,8 +119,13 @@ app.post('/users', (req, res) => {
   }).then((token) => {
     res.header('x-auth', token).send(user); //HTTP response header
   }).catch((e) => {
-    res.status(400).send(e);
+    res.status(401).send(e);
   })
+});
+
+//get route for a specific user
+app.get("/users/me", authenticate, (req, res) => {
+    res.send(req.user); 
 });
 
 
