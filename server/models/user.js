@@ -75,14 +75,36 @@ UserSchema.statics.findByToken = function (token) {
     });
 };
 
+UserSchema.statics.findByCredentials = function (email, password) {
+    var user = this; 
+
+    return User.findOne({email}).then((user) => {
+        if(!user){
+            return Promise.reject();
+        }
+
+      console.log("user found!");
+
+        return new Promise((resolve, reject) => {
+            bcrypt.compare(password, user.password, (err, res) => {    
+                if(res === false){
+                   reject();
+                }  else {
+                    resolve(user);
+                }
+                
+            });
+        });
+    });
+};
+
+
 //configure model before saving
 UserSchema.pre('save', function(next) {
     var user = this; 
 
     if(user.isModified('password')){
-        //fill this in 
-        //user.password
-
+   
         bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(user.password, salt, (err, hash) => {
                 user.password = hash; 
