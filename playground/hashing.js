@@ -15,6 +15,7 @@
 
 const {SHA256} = require("crypto-js");
 const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
 
 var data = {
     id: 10
@@ -22,11 +23,11 @@ var data = {
 
 
 
-var token = jwt.sign(data, "123abff"); //creates the hash, returns token
-console.log(token);
+// var token = jwt.sign(data, "123abff"); //creates the hash, returns token
+// console.log(token);
 
-var decoded = jwt.verify(token, "1123abff");
-console.log("decoded", decoded);//determines if data was manipulated
+// var decoded = jwt.verify(token, "1123abff");
+// console.log("decoded", decoded);//determines if data was manipulated
 
 
 
@@ -57,5 +58,28 @@ console.log("decoded", decoded);//determines if data was manipulated
 // } else {
 //     console.log("Data was changed.")
 // }
+
+
+//USING BCRYPT, A 3RD PARTY MODULE FOR HASHING AND SALTING
+var password = "password12333";
+
+// bcrypt.genSalt(10, (err, salt) => {
+//     bcrypt.hash(password, salt, (err, hash) => {
+//         console.log(hash);
+//     });
+// });
+
+var hashedPW = "$2a$10$nfhMIwDmBH.ggnwjez6e6eDrrUyDLHIkkFyj0uVV1rkyKkMtPYBFm";
+bcrypt.compare(password, hashedPW, (err, res) => {
+    console.log(res);
+});
+
+
+
+
+
+
+
+
 
 
