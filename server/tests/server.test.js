@@ -5,26 +5,11 @@ const request = require("supertest");
 const {app} = require("./../server");
 const {Todo} = require("./../models/todo");
 const {ObjectID} = require("mongodb");
-
-const todos = [{
-    _id: new ObjectID(),
-    text: "First test todo"
-}, {
-    _id: new ObjectID(),
-    text: "second test todo",
-    completed: true,
-    completedAt: 15000
-}, {
-    _id: new ObjectID(),
-    text: "third test todo"
-}];
+const {todos, populateTodos, users, populateUsers} = require("./seed.js");
 
 
-beforeEach((done) =>{
-    Todo.remove({}).then(()=>{
-        Todo.insertMany(todos); //insert dummy vbls into database for testing
-    }).then(() => done());
-});
+beforeEach(populateUsers);
+beforeEach(populateTodos);
 
 //test POST request
 describe("POST Todos", () =>{
