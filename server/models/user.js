@@ -1,3 +1,4 @@
+
 const mongoose = require("mongoose");
 const validator = require("validator");
 const jwt = require("jsonwebtoken");
@@ -83,7 +84,6 @@ UserSchema.statics.findByCredentials = function (email, password) {
             return Promise.reject();
         }
 
-      console.log("user found!");
 
         return new Promise((resolve, reject) => {
             bcrypt.compare(password, user.password, (err, res) => {    
